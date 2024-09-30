@@ -5,7 +5,7 @@ pipeline {
         // Define Docker Hub credentials ID
         DOCKERHUB_CREDENTIALS_ID = 'dockerhub-johannes-cred'
         // Define Docker Hub repository name
-        DOCKERHUB_REPO = 'johannesliikanen/tempconverter_johannes'
+        DOCKERHUB_REPO = 'johannesliikanen/calculator'
         // Define Docker image tag
         DOCKER_IMAGE_TAG = 'ver2'
     }
@@ -13,7 +13,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout code from Git repository
-                git 'https://github.com/emotytto00/.git'
+                git 'https://github.com/emotytto00/docker_calc.git'
             }
         }
         stage('Run Tests') {

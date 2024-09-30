@@ -7,15 +7,40 @@ pipeline {
         // Define Docker Hub repository name
         DOCKERHUB_REPO = 'johannesliikanen/tempconverter_johannes'
         // Define Docker image tag
-        DOCKER_IMAGE_TAG = 'latest'
+        DOCKER_IMAGE_TAG = 'ver2'
     }
     stages {
         stage('Checkout') {
             steps {
                 // Checkout code from Git repository
-                git 'https://github.com/emotytto00/docker_calc.git'
+                git 'https://github.com/emotytto00/.git'
             }
         }
+        stage('Run Tests') {
+                    steps {
+                        // Run the tests first to generate data for Jacoco and JUnit
+                        bat 'mvn clean test' // For Windows agents
+                        // sh 'mvn clean test' // Uncomment if on a Linux agent
+                    }
+                }
+                stage('Code Coverage') {
+                    steps {
+                        // Generate Jacoco report after the tests have run
+                        bat 'mvn jacoco:report'
+                    }
+                }
+                stage('Publish Test Results') {
+                    steps {
+                        // Publish JUnit test results
+                        junit '**/target/surefire-reports/*.xml'
+                    }
+                }
+                stage('Publish Coverage Report') {
+                    steps {
+                        // Publish Jacoco coverage report
+                        jacoco()
+                    }
+                }
         stage('Build Docker Image') {
             steps {
                 // Build Docker image
